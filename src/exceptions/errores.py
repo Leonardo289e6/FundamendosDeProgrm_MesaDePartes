@@ -76,8 +76,3 @@ class CodigoDuplicadoError(ErrorNegocio):
 class VentaNoEncontradaError(ErrorNegocio):
     def __init__(self):
         super().__init__("no existe una venta con ese código.")
-        
-
-class InventarioLlenoError(ErrorNegocio):
-    def __init__(self):
-        super().__init__("no hay espacio para más ventas.")
