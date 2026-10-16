@@ -10,6 +10,7 @@ from exceptions.errores import (ClienteDuplicadoError, ClienteNoEncontradoError,
                                 CredencialesInvalidasError, PermisoDenegadoError,
                                 SesionRequeridaError, StockInsuficienteError,
                                 ValorInvalidoError, VentaNoEncontradaError)
+
 from models import cliente, empleado, producto, venta
 from services import auth_service as auth
 from services import cliente_service as clientes
