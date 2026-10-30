@@ -75,7 +75,7 @@ def ordenar_por_codigo():
     for i in range(n - 1):
         for j in range(n - 1 - i):
             if m.codigos[j] > m.codigos[j + 1]:
-    _intercambiar(j, j + 1)
+                _intercambiar(j, j + 1)
 
 
 def ordenar_por_total():
