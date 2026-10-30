@@ -1,4 +1,5 @@
 """Servicio de ventas: reglas de negocio. Une ventas con clientes, inventario y sesión."""
+from almacenamiento import gestor
 from config import settings
 from exceptions.errores import (CapacidadLlenaError, CodigoDuplicadoError,
                                 StockInsuficienteError, VentaNoEncontradaError)
@@ -7,10 +8,11 @@ from services import auth_service as auth
 from services import cliente_service as clientes
 from services import producto_service as productos
 from utils import cadenas
+from utils import recursividad
 
 
 def calcular_total(cantidad, precio_unitario):
-    return cantidad * precio_unitario * (1 + settings.IGV)
+    return round(cantidad * precio_unitario * (1 + settings.IGV), 2)   # 2 decimales: igual que en archivo y BD
 
 
 def _detalle(venta):
@@ -41,6 +43,7 @@ def registrar_venta(codigo, documento, cod_producto, cantidad):
     total = calcular_total(cantidad, precio)
     repo.guardar(codigo, documento, cod_producto, cantidad, precio, total,
                  auth.empleado_actual()[0])
+    gestor.confirmar()      # venta + stock descontado se guardan juntos
     return total
 
 
@@ -50,6 +53,21 @@ def buscar_venta(codigo):
     if pos == -1:
         return None
     return _detalle(repo.obtener(pos))
+
+
+def buscar_venta_recursiva(codigo):
+    """Igual que buscar_venta, pero la posición se halla con búsqueda recursiva."""
+    codigos = [repo.obtener(i)[0] for i in range(repo.cantidad())]
+    pos = recursividad.buscar_recursivo(codigos, codigo)
+    if pos == -1:
+        return None
+    return _detalle(repo.obtener(pos))
+
+
+def monto_acumulado_recursivo():
+    """Monto total de todas las ventas, sumado con recursividad."""
+    totales = [repo.obtener(i)[5] for i in range(repo.cantidad())]
+    return recursividad.sumar_recursivo(totales, len(totales))
 
 
 def modificar_venta(codigo, documento, cod_producto, cantidad):
@@ -75,6 +93,7 @@ def modificar_venta(codigo, documento, cod_producto, cantidad):
     precio = precio_anterior if cod_producto == prod_anterior else producto[2]
     total = calcular_total(cantidad, precio)
     repo.actualizar(pos, documento, cod_producto, cantidad, precio, total)
+    gestor.confirmar()
     return total
 
 
@@ -87,6 +106,7 @@ def eliminar_venta(codigo):
     _, _, cod_producto, cantidad, _, _, _ = repo.obtener(pos)
     productos.devolver_stock(cod_producto, cantidad)
     repo.eliminar(pos)
+    gestor.confirmar()
 
 
 def buscar_por_texto(texto):

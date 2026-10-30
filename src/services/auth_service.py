@@ -1,5 +1,6 @@
 """Servicio de autenticación: empleados, sesión activa y permisos por rol."""
 from config import settings
+from almacenamiento import gestor
 from exceptions.errores import (CapacidadLlenaError, CredencialesInvalidasError,
                                 PermisoDenegadoError, SesionRequeridaError,
                                 UsuarioDuplicadoError)
@@ -16,6 +17,7 @@ def _crear(usuario, clave, nombre, rol):
         raise UsuarioDuplicadoError()
     sal = seguridad.generar_sal()
     repo.guardar(usuario, seguridad.generar_hash(clave, sal), sal, nombre, rol)
+    gestor.confirmar()
 
 
 def hay_empleados():
@@ -54,10 +56,6 @@ def cerrar_sesion():
 
 def empleado_actual():
     return _sesion
-
-
-def hay_sesion():
-    return _sesion is not None
 
 
 def es_admin():

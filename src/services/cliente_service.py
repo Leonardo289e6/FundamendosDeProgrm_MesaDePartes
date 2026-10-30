@@ -1,4 +1,5 @@
 """Servicio de clientes: reglas de negocio. Usa el repositorio, nunca los arreglos."""
+from almacenamiento import gestor
 from config import settings
 from exceptions.errores import (CapacidadLlenaError, ClienteDuplicadoError,
                                 ClienteNoEncontradoError)
@@ -13,6 +14,7 @@ def registrar_cliente(documento, nombre, telefono):
     if repo.buscar_por_documento(documento) != -1:
         raise ClienteDuplicadoError()
     repo.guardar(documento, nombre, telefono)
+    gestor.confirmar()
 
 
 def existe_cliente(documento):
@@ -40,6 +42,7 @@ def modificar_cliente(documento, nombre, telefono):
     if pos == -1:
         raise ClienteNoEncontradoError()
     repo.actualizar(pos, nombre, telefono)
+    gestor.confirmar()
 
 
 def listar_clientes():

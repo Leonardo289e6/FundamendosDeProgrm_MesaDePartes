@@ -1,4 +1,5 @@
 """Servicio de inventario: productos y stock. Usa el repositorio, nunca los arreglos."""
+from almacenamiento import gestor
 from config import settings
 from exceptions.errores import (CapacidadLlenaError, ProductoDuplicadoError,
                                 ProductoNoEncontradoError, StockInsuficienteError)
@@ -13,6 +14,7 @@ def registrar_producto(codigo, nombre, precio, stock):
     if repo.buscar_por_codigo(codigo) != -1:
         raise ProductoDuplicadoError()
     repo.guardar(codigo, nombre, precio, stock)
+    gestor.confirmar()
 
 
 def buscar_producto(codigo):
@@ -38,6 +40,7 @@ def reponer_stock(codigo, cantidad):
         raise ProductoNoEncontradoError()
     nuevo = repo.obtener(pos)[3] + cantidad
     repo.actualizar_stock(pos, nuevo)
+    gestor.confirmar()
     return nuevo
 
 
