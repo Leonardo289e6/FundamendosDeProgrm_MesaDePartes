@@ -30,3 +30,11 @@ def actualizar(pos, nombre, telefono):
     """Modifica un cliente existente. El documento no cambia."""
     m.nombres[pos] = nombre
     m.telefonos[pos] = telefono
+
+
+def vaciar():
+    """Limpia los datos de clientes para recargarlos desde persistencia."""
+    m.documentos[:] = [""] * len(m.documentos)
+    m.nombres[:] = [""] * len(m.nombres)
+    m.telefonos[:] = [""] * len(m.telefonos)
+    m.total_registros = 0

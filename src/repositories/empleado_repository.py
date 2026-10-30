@@ -32,3 +32,13 @@ def obtener(pos):
 def obtener_credenciales(pos):
     """Hash y sal: solo los usa el servicio de autenticación."""
     return (m.hashes[pos], m.sales[pos])
+
+
+def vaciar():
+    """Limpia los datos de empleados para recargarlos desde persistencia."""
+    m.usuarios[:] = [""] * len(m.usuarios)
+    m.hashes[:] = [""] * len(m.hashes)
+    m.sales[:] = [""] * len(m.sales)
+    m.nombres[:] = [""] * len(m.nombres)
+    m.roles[:] = [""] * len(m.roles)
+    m.total_registros = 0

@@ -29,3 +29,12 @@ def buscar_por_codigo(codigo):
 
 def actualizar_stock(pos, stock):
     m.stocks[pos] = stock
+
+
+def vaciar():
+    """Limpia los datos de productos para recargarlos desde persistencia."""
+    m.codigos[:] = [""] * len(m.codigos)
+    m.nombres[:] = [""] * len(m.nombres)
+    m.precios[:] = [0.0] * len(m.precios)
+    m.stocks[:] = [0] * len(m.stocks)
+    m.total_registros = 0

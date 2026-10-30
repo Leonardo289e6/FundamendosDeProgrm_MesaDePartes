@@ -75,7 +75,7 @@ def ordenar_por_codigo():
     for i in range(n - 1):
         for j in range(n - 1 - i):
             if m.codigos[j] > m.codigos[j + 1]:
-                _intercambiar(j, j + 1)
+    _intercambiar(j, j + 1)
 
 
 def ordenar_por_total():
@@ -88,3 +88,10 @@ def ordenar_por_total():
                 mayor = j
         if mayor != i:
             _intercambiar(i, mayor)
+
+
+def vaciar():
+    """Limpia los datos de ventas para recargarlos desde persistencia."""
+    for arr, vacio in zip(_arreglos(), _VACIOS):
+        arr[:] = [vacio] * len(arr)
+    m.total_registros = 0
