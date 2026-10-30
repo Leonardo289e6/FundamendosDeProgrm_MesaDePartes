@@ -33,6 +33,10 @@ def validar_codigo(texto):
     codigo = cadenas.normalizar_codigo(texto)
     if codigo == "":
         raise ValorInvalidoError("el código no puede estar vacío.")
+    if len(codigo) > settings.LONGITUD_MAX_CODIGO:
+        raise ValorInvalidoError(
+            f"el código no puede superar los {settings.LONGITUD_MAX_CODIGO} caracteres."
+        )
     return codigo
 
 
@@ -40,6 +44,10 @@ def validar_nombre(texto):
     nombre = cadenas.normalizar_nombre(texto)
     if nombre == "":
         raise ValorInvalidoError("el campo no puede estar vacío.")
+    if len(nombre) > settings.LONGITUD_MAX_NOMBRE:
+        raise ValorInvalidoError(
+            f"el nombre no puede superar los {settings.LONGITUD_MAX_NOMBRE} caracteres."
+        )
     return nombre
 
 
@@ -100,6 +108,8 @@ def validar_decimal_positivo(texto):
         n = float(texto)
     except ValueError:
         raise ValorInvalidoError("ingrese un monto mayor a 0.")
+
     if n <= 0:
         raise ValorInvalidoError("ingrese un monto mayor a 0.")
-    return n
+
+    return round(n, 2)
