@@ -1,0 +1,3 @@
+# Solo hace falta si se usa PostgreSQL (VENTAS_PERSISTENCIA=postgresql).
+# El modo por defecto (archivos) y la consola no necesitan instalar nada.
+psycopg2-binary>=2.9

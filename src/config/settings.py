@@ -50,4 +50,5 @@ PG_BASE = os.environ.get("PGDATABASE", "ventas_narvaez")
 PG_USUARIO = os.environ.get("PGUSER", "postgres")
 PG_CLAVE = os.environ.get("PGPASSWORD", "")
 
-
+# Pruebas de rendimiento de la recursividad (tamaños de lista; el límite de Python es ~1000)
+TAMANOS_PRUEBA_RECURSION = (100, 500, 2000, 10000)

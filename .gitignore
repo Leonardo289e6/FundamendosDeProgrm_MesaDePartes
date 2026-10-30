@@ -3,3 +3,5 @@ __pycache__/
 .vscode/
 .docs
 .tests
+# Datos reales guardados por el sistema (contienen hashes de contraseñas)
+src/datos/
