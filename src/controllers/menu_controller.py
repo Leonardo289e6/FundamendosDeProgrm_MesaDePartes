@@ -1,6 +1,6 @@
 """Controlador del menú: login, menú principal y submenús. Solo navega; no tiene reglas."""
 from controllers import auth_controller, cliente_controller, producto_controller
-from controllers import venta_controller
+from controllers import recursividad_controller, venta_controller
 from services import auth_service as auth
 from views import consola_view as vista
 
@@ -62,14 +62,24 @@ def _menu_empleados():
     ])
 
 
+def _menu_recursividad():
+    _ejecutar_menu("RECURSIVIDAD (iterativo vs recursivo)", [
+        (1, "Explicación: caso base, caso recursivo y parada", recursividad_controller.explicacion),
+        (2, "Acumulado de ventas (iterativo vs recursivo)", recursividad_controller.acumulado),
+        (3, "Buscar venta por código (iterativo vs recursivo)", recursividad_controller.busqueda),
+        (4, "Prueba de rendimiento y desbordamiento", recursividad_controller.rendimiento),
+    ])
+
+
 def _menu_principal():
     opciones = [
         (1, "Ventas", _menu_ventas),
         (2, "Clientes", _menu_clientes),
         (3, "Inventario", _menu_inventario),
+        (4, "Recursividad", _menu_recursividad),
     ]
     if auth.es_admin():
-        opciones.append((4, "Empleados", _menu_empleados))
+        opciones.append((5, "Empleados", _menu_empleados))
     _ejecutar_menu("MAQUINARIAS NARVÁEZ S.A.C. - MENÚ PRINCIPAL", opciones, "Cerrar sesión")
 
 
