@@ -76,3 +76,22 @@ class CodigoDuplicadoError(ErrorNegocio):
 class VentaNoEncontradaError(ErrorNegocio):
     def __init__(self):
         super().__init__("no existe una venta con ese código.")
+
+
+
+
+class InventarioLlenoError(ErrorNegocio):
+    def __init__(self):
+        super().__init__("no hay espacio para más ventas.")
+
+
+# --- persistencia ---
+class ErrorPersistencia(ErrorNegocio):
+    """No se pudieron leer o guardar los datos (archivo, permisos, conexión...)."""
+
+
+class DatosCorruptosError(ErrorPersistencia):
+    """Los datos leídos no cumplen las reglas de integridad."""
+    def __init__(self, origen, detalle):
+        super().__init__(f"datos inválidos en {origen}: {detalle}")
+
