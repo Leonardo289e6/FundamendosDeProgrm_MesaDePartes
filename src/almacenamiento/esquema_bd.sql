@@ -1,9 +1,9 @@
 -- ============================================================
 -- Control de Ventas - Maquinarias Narváez S.A.C.
--- Esquema de base de datos PARA EL FUTURO (PostgreSQL).
--- Hoy los datos viven en arreglos paralelos (src/models/);
+-- Esquema de la base de datos (PostgreSQL).
+-- Lo ejecuta almacenamiento/postgres.py al conectarse (es idempotente: IF NOT EXISTS).
+-- Los datos de trabajo viven en arreglos paralelos (src/models/);
 -- cada arreglo paralelo corresponde a una tabla de este esquema.
--- Este script NO lo usa el programa todavía.
 -- ============================================================
 
 -- models/empleado.py  ->  empleados
@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS ventas (
     precio_unitario   NUMERIC(12,2) NOT NULL,      -- precio al momento de la venta (sin IGV)
     total             NUMERIC(14,2) NOT NULL,      -- con IGV (18 %)
     usuario_vendedor  VARCHAR(20)   NOT NULL REFERENCES empleados(usuario),
-    fecha_venta       TIMESTAMP     NOT NULL DEFAULT now()   -- pendiente en la versión con arreglos
+    fecha_venta       TIMESTAMP     NOT NULL DEFAULT now()   -- la asigna la BD al insertar
 );
 
--- Regla de negocio que la BD debe respetar (hoy la aplica venta_service.py):
--- al insertar una venta, productos.stock se reduce en 'cantidad' dentro de la MISMA transacción;
--- si el stock no alcanza, la transacción se cancela (CHECK stock >= 0).
+-- Regla de negocio: la venta y el cambio de stock se guardan en la MISMA transacción
+-- (postgres.py sincroniza las 4 tablas dentro de un solo COMMIT; si falla algo, ROLLBACK).
+-- El CHECK stock >= 0 es la última barrera si algún día falla la validación del servicio.
